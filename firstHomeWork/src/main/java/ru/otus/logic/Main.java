@@ -1,4 +1,4 @@
-package ru.otus.homeWork;
+package ru.otus.logic;
 
 import com.google.common.collect.Lists;
 
