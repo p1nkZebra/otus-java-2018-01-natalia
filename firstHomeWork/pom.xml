@@ -46,12 +46,6 @@
             <version>${apache.commons.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/net.sf.proguard/proguard-base -->
-        <dependency>
-            <groupId>net.sf.proguard</groupId>
-            <artifactId>proguard-base</artifactId>
-            <version>${net.sf.proguard.version}</version>
-        </dependency>
     </dependencies>
 
 
@@ -118,7 +112,7 @@
                     <outjar>firstHomeWork-release.jar</outjar>
 
                     <options>
-                        <option>-keep public class ru.otus.homeWork.Main {public static void main(java.lang.String[]);}</option>
+                        <option>-keep public class ru.otus.logic.Main {public static void main(java.lang.String[]);}</option>
                         <option>-dontwarn</option>
                     </options>
 
@@ -127,22 +121,11 @@
                     <dependency>
                         <groupId>net.sf.proguard</groupId>
                         <artifactId>proguard-base</artifactId>
-                        <version>6.0</version>
-                        <scope>system</scope>
-                        <systemPath>${basedir}/proguard/proguard-base-6.0.jar</systemPath>
+                        <version>${net.sf.proguard.version}</version>
                     </dependency>
                 </dependencies>
             </plugin>
 
-            <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-compiler-plugin</artifactId>-->
-                <!--<version>${org.apache.maven.plugins.maven.compiler.version}</version>-->
-                <!--<configuration>-->
-                    <!--<source>${maven.compiler.source}</source>-->
-                    <!--<target>${maven.compiler.target}</target>-->
-                <!--</configuration>-->
-            <!--</plugin>-->
         </plugins>
     </build>
 

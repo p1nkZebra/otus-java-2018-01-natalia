@@ -6,4 +6,4 @@
 -printmapping pgmapout.map
 -dontwarn
 
--keep public class ru.otus.homeWork.Main {public static void main(java.lang.String[]);}
+-keep public class ru.otus.logic.Main {public static void main(java.lang.String[]);}
