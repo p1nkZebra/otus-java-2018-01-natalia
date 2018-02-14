@@ -72,7 +72,7 @@
                 <version>${maven.assembly.plugin.version}</version>
                 <executions>
                     <execution>
-                        <id>my-maven-assembly-plugin</id>
+                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
                             <goal>single</goal>
@@ -103,25 +103,35 @@
                         <goals>
                             <goal>proguard</goal>
                         </goals>
+
+                        <configuration>
+                            <proguardVersion>${net.sf.proguard.version}</proguardVersion>
+                            <obfuscate>true</obfuscate>
+                            <injar>firstHomeWork.jar</injar>
+                            <outjar>firstHomeWork-release.jar</outjar>
+
+                            <options>
+                                <option>-keep public class ru.otus.logic.Main {public static void main(java.lang.String[]);}</option>
+                                <option>-dontwarn</option>
+                            </options>
+                            <libs>
+                                <lib>${java.home}/lib/rt.jar</lib>
+                            </libs>
+
+                            <includeDependency>false</includeDependency>
+
+                        </configuration>
+
                     </execution>
                 </executions>
 
-                <configuration>
-                    <proguardVersion>6.0</proguardVersion>
-                    <obfuscate>true</obfuscate>
-                    <outjar>firstHomeWork-release.jar</outjar>
 
-                    <options>
-                        <option>-keep public class ru.otus.logic.Main {public static void main(java.lang.String[]);}</option>
-                        <option>-dontwarn</option>
-                    </options>
-
-                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>net.sf.proguard</groupId>
                         <artifactId>proguard-base</artifactId>
                         <version>${net.sf.proguard.version}</version>
+                        <scope>runtime</scope>
                     </dependency>
                 </dependencies>
             </plugin>
