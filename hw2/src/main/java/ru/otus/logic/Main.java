@@ -1,6 +1,7 @@
 package ru.otus.logic;
 
 import java.lang.management.ManagementFactory;
+import java.util.function.Supplier;
 
 @SuppressWarnings({"RedundantStringConstructorCall", "InfiniteLoopStatement"})
 public class Main {
@@ -12,167 +13,111 @@ public class Main {
 
         System.out.println("Starting the loop");
         while (true) {
-            checkSizeOfReference();
 
-            checkSizeOfEmptyStringFromStringPool();
+            System.out.println("\n\nCheck size for \'empty reference\'\n");
+            checkSize(() -> null);
 
-            checkSizeOfEmptyString();
+            System.out.println("\n\nCheck size for empty String from String pool\n");
+            checkSize(() -> new String(""));
 
-            checkSizeOfEmptyObject();
+            System.out.println("\n\nCheck size for empty String\n");
+            checkSize(() -> new String(new char[0]));
 
-            checkSizeOfClassEmptyClass();
+            System.out.println("\n\nCheck size for empty Object\n");
+            checkSize(() -> new Object());
 
-            checkSizeOfClassPrimitivesClass();
+            System.out.println("\n\nCheck size for instance of EmptyClass\n");
+            checkSize(() -> new EmptyClass());
 
-            checkSizeOfClassReferencesClass();
+            System.out.println("\n\nCheck size for instance of PrimitivesClass\n");
+            checkSize(() -> new PrimitivesClass());
+
+            System.out.println("\n\nCheck size for instance of ReferencesClass\n");
+            checkSize(() -> new ReferencesClass());
+
+
+
+            System.out.println("\n\nCheck size for container int[0]\n");
+            checkArrayContainerSize(0);
+
+            System.out.println("\n\nCheck size for container int[1]\n");
+            checkArrayContainerSize(1);
+
+            System.out.println("\n\nCheck size for container int[2]\n");
+            checkArrayContainerSize(2);
+
+            System.out.println("\n\nCheck size for container int[3]\n");
+            checkArrayContainerSize(3);
+
+            System.out.println("\n\nCheck size for container int[5]\n");
+            checkArrayContainerSize(5);
+
+            System.out.println("\n\nCheck size for container int[10]\n");
+            checkArrayContainerSize(10);
+
+            System.out.println("\n\nCheck size for container int[20]\n");
+            checkArrayContainerSize(20);
+
+            System.out.println("\n\nCheck size for container int[50]\n");
+            checkArrayContainerSize(50);
+
+            System.out.println("\n\nCheck size for container int[100]\n");
+            checkArrayContainerSize(100);
+
+            System.out.println("\n\nCheck size for container int[500]\n");
+            checkArrayContainerSize(500);
+
+            System.out.println("\n\nCheck size for container int[1000]\n");
+            checkArrayContainerSize(1000);
+
         }
     }
 
-    private static void checkSizeOfReference() throws InterruptedException {
-        System.out.println("\n\nCheck size for reference\n");
+    private static void checkSize(Supplier<Object> supplier) throws InterruptedException {
+        Runtime runtime = Runtime.getRuntime();
+        Object[] array = new Object[ARRAY_SIZE];
 
         runGarbageCollector();
-
-        Runtime runtime = Runtime.getRuntime();
-        long initUsedMemory = runtime.totalMemory() - runtime.freeMemory();
-
-        Object[] array = new Object[ARRAY_SIZE];
-        System.out.println("Create array of references");
-
-        long usedMemoryAfter = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Memory for one reference: " + (usedMemoryAfter - initUsedMemory) / ARRAY_SIZE);
-    }
-
-    private static void checkSizeOfEmptyStringFromStringPool() throws InterruptedException {
-        System.out.println("\n\nCheck size for empty String from String pool\n");
-
-        runGarbageCollector();
-
-        Object[] array = new Object[ARRAY_SIZE];
-        System.out.println("Create array of references");
-
-        Runtime runtime = Runtime.getRuntime();
-        long initUsedMemory = runtime.totalMemory() - runtime.freeMemory();
-
-        System.out.println("New array of size: " + array.length + " created");
-        for (int i = 0; i < ARRAY_SIZE; i++) {
-            array[i] = new String(""); //String pool
-        }
-
-        long usedMemoryAfterArrayFilling = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Memory for one empty String from String pool: " + (usedMemoryAfterArrayFilling - initUsedMemory) / ARRAY_SIZE);
-
-        Thread.sleep(1000); //wait for 1 sec
-    }
-
-    private static void checkSizeOfEmptyString() throws InterruptedException {
-        System.out.println("\n\nCheck size for empty String\n");
-
-        runGarbageCollector();
-
-        Object[] array = new Object[ARRAY_SIZE];
-        System.out.println("Create array of references");
-
-        Runtime runtime = Runtime.getRuntime();
-        long initUsedMemory = runtime.totalMemory() - runtime.freeMemory();
-
-        System.out.println("New array of size: " + array.length + " created");
-        for (int i = 0; i < ARRAY_SIZE; i++) {
-            array[i] = new String(new char[0]); //without String pool
-        }
-
-        long usedMemoryAfterArrayFilling = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Memory for one empty String: " + (usedMemoryAfterArrayFilling - initUsedMemory) / ARRAY_SIZE);
-
-        Thread.sleep(1000); //wait for 1 sec
-    }
-
-    private static void checkSizeOfEmptyObject() throws InterruptedException {
-        System.out.println("\n\nCheck size for empty Object\n");
-
-        runGarbageCollector();
-
-        Object[] array = new Object[ARRAY_SIZE];
-        System.out.println("Create array of references");
-
-        Runtime runtime = Runtime.getRuntime();
         long initUsedMemory = runtime.totalMemory() - runtime.freeMemory();
 
         System.out.println("New array of size: " + array.length + " created");
         for (int i = 0; i < ARRAY_SIZE; i++) {
-            array[i] = new Object();
+            array[i] = supplier.get();
         }
-
-        long usedMemoryAfterArrayFilling = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Memory for one empty Object: " + (usedMemoryAfterArrayFilling - initUsedMemory) / ARRAY_SIZE);
-
-        Thread.sleep(1000); //wait for 1 sec
-    }
-
-    private static void checkSizeOfClassEmptyClass() throws InterruptedException {
-        System.out.println("\n\nCheck size for instance of EmptyClass\n");
 
         runGarbageCollector();
-
-        Object[] array = new Object[ARRAY_SIZE];
-        System.out.println("Create array of references");
-
-        Runtime runtime = Runtime.getRuntime();
-        long initUsedMemory = runtime.totalMemory() - runtime.freeMemory();
-
-        System.out.println("New array of size: " + array.length + " created");
-        for (int i = 0; i < ARRAY_SIZE; i++) {
-            array[i] = new EmptyClass();
-        }
-
         long usedMemoryAfterArrayFilling = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Memory for one EmptyClass instance: " + (usedMemoryAfterArrayFilling - initUsedMemory) / ARRAY_SIZE);
+        System.out.println("Used memory for element: " + (usedMemoryAfterArrayFilling - initUsedMemory) / ARRAY_SIZE);
 
-        Thread.sleep(1000); //wait for 1 sec
+
+        //any use for array
+        Object[] array2 = new Object[ARRAY_SIZE];
+        for (int i = 0; i < ARRAY_SIZE; i++) {
+            array2[i] = array[i];
+        }
+        Thread.sleep(1000);
     }
 
-    private static void checkSizeOfClassPrimitivesClass() throws InterruptedException {
-        System.out.println("\n\nCheck size for instance of PrimitivesClass\n");
+    private static void checkArrayContainerSize(int size) throws InterruptedException {
+        Runtime runtime = Runtime.getRuntime();
 
         runGarbageCollector();
-
-        Object[] array = new Object[ARRAY_SIZE];
-        System.out.println("Create array of references");
-
-        Runtime runtime = Runtime.getRuntime();
         long initUsedMemory = runtime.totalMemory() - runtime.freeMemory();
 
-        System.out.println("New array of size: " + array.length + " created");
-        for (int i = 0; i < ARRAY_SIZE; i++) {
-            array[i] = new PrimitivesClass();
-        }
-
-        long usedMemoryAfterArrayFilling = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Memory for one PrimitivesClass instance: " + (usedMemoryAfterArrayFilling - initUsedMemory) / ARRAY_SIZE);
-
-        Thread.sleep(1000); //wait for 1 sec
-    }
-
-    private static void checkSizeOfClassReferencesClass() throws InterruptedException {
-        System.out.println("\n\nCheck size for instance of ReferencesClass\n");
+        System.out.println("New array of size: " + size + " created");
+        int[] array = new int[size];
 
         runGarbageCollector();
+        long usedMemoryAfterArrayFilling = runtime.totalMemory() - runtime.freeMemory();
+        System.out.println("Memory for array container: " + (usedMemoryAfterArrayFilling - initUsedMemory));
 
-        Object[] array = new Object[ARRAY_SIZE];
-        System.out.println("Create array of references");
-
-        Runtime runtime = Runtime.getRuntime();
-        long initUsedMemory = runtime.totalMemory() - runtime.freeMemory();
-
-        System.out.println("New array of size: " + array.length + " created");
-        for (int i = 0; i < ARRAY_SIZE; i++) {
-            array[i] = new ReferencesClass();
+        //any use for array
+        int[] array2 = new int[size];
+        for (int i = 0; i < size; i++) {
+            array2[i] = array[i];
         }
 
-        long usedMemoryAfterArrayFilling = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Memory for one ReferencesClass instance: " + (usedMemoryAfterArrayFilling - initUsedMemory) / ARRAY_SIZE);
-
-        Thread.sleep(1000); //wait for 1 sec
+        Thread.sleep(1000);
     }
 
     private static void runGarbageCollector() throws InterruptedException {
