@@ -38,37 +38,25 @@ public class Main {
 
 
             System.out.println("\n\nCheck size for container int[0]\n");
-            checkArrayContainerSize(0);
+            checkSize(() -> new int[0]);
 
             System.out.println("\n\nCheck size for container int[1]\n");
-            checkArrayContainerSize(1);
-
-            System.out.println("\n\nCheck size for container int[2]\n");
-            checkArrayContainerSize(2);
-
-            System.out.println("\n\nCheck size for container int[3]\n");
-            checkArrayContainerSize(3);
-
-            System.out.println("\n\nCheck size for container int[5]\n");
-            checkArrayContainerSize(5);
+            checkSize(() -> new int[1]);
 
             System.out.println("\n\nCheck size for container int[10]\n");
-            checkArrayContainerSize(10);
-
-            System.out.println("\n\nCheck size for container int[20]\n");
-            checkArrayContainerSize(20);
+            checkSize(() -> new int[10]);
 
             System.out.println("\n\nCheck size for container int[50]\n");
-            checkArrayContainerSize(50);
+            checkSize(() -> new int[50]);
 
             System.out.println("\n\nCheck size for container int[100]\n");
-            checkArrayContainerSize(100);
+            checkSize(() -> new int[100]);
 
             System.out.println("\n\nCheck size for container int[500]\n");
-            checkArrayContainerSize(500);
+            checkSize(() -> new int[500]);
 
             System.out.println("\n\nCheck size for container int[1000]\n");
-            checkArrayContainerSize(1000);
+            checkSize(() -> new int[1000]);
 
         }
     }
@@ -95,28 +83,6 @@ public class Main {
         for (int i = 0; i < ARRAY_SIZE; i++) {
             array2[i] = array[i];
         }
-        Thread.sleep(1000);
-    }
-
-    private static void checkArrayContainerSize(int size) throws InterruptedException {
-        Runtime runtime = Runtime.getRuntime();
-
-        runGarbageCollector();
-        long initUsedMemory = runtime.totalMemory() - runtime.freeMemory();
-
-        System.out.println("New array of size: " + size + " created");
-        int[] array = new int[size];
-
-        runGarbageCollector();
-        long usedMemoryAfterArrayFilling = runtime.totalMemory() - runtime.freeMemory();
-        System.out.println("Memory for array container: " + (usedMemoryAfterArrayFilling - initUsedMemory));
-
-        //any use for array
-        int[] array2 = new int[size];
-        for (int i = 0; i < size; i++) {
-            array2[i] = array[i];
-        }
-
         Thread.sleep(1000);
     }
 
